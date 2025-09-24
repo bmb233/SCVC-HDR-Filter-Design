@@ -1,0 +1,205 @@
+########################################################################################
+# Brachytherapy Filter Optimization (Dwell 1)                                          #
+#                                                                                      #
+#                                                                                      #
+# By: Brett Bocian                                                                     #
+# Date: 6/5/2024                                                                       #
+#                                                                                      #
+########################################################################################
+
+################################### GUI and Other #####################################
+
+i:Ts/NumberOfThreads = 0 # Use maximum amount of threads
+
+#s:Gr/ViewA/Type 		= "OpenGL"
+#uc:Gr/ViewA/Zoom            	= 1
+#b:Gr/Enable 			= "True" 
+#s:Gr/RefreshEvery 		= "Run" # "History", "Run" or "Session"
+#b:Ts/UseQt 			= "True"
+#b:Ts/PauseBeforeQuit 		= "True"
+
+i:Ts/ShowHistoryCountAtInterval = 1000
+
+#b:Ge/PMMAcylinder/Invisible = "True"
+#b:Ge/PMMAcap/Invisible = "True"
+#b:Ge/HalfcylinderAir/Invisible = "True"
+
+#b:Ge/QuitIfOverlapDetected = "False"
+
+################################### World Geometry #####################################
+
+d:Ge/World/HLX = 15 cm
+d:Ge/World/HLY = 15 cm
+d:Ge/World/HLZ = 15 cm
+s:Ge/World/Material = "G4_WATER"
+
+################################### Material Definition #####################################
+
+sv:Ma/StainlessSteel316L/Components = 10 "Carbon" "Silicon" "Manganese" "Phosphorus" "Sulfur" "Chromium" "Nickel" "Nitrogen" "Molybdenum" "Iron"
+uv:Ma/StainlessSteel316L/Fractions  = 10 0.0003 0.01 0.02 0.00045 0.00015 0.165 0.1 0.0001 0.02 0.684
+d:Ma/StainlessSteel316L/Density     = 8.0 g/cm3
+
+sv:Ma/StainlessSteel304/Components = 9 "Carbon" "Silicon" "Manganese" "Phosphorus" "Sulfur" "Chromium" "Nickel" "Nitrogen" "Iron"
+uv:Ma/StainlessSteel304/Fractions  = 9 0.0007 0.01 0.02 0.0005 0.0003 0.175 0.08 0.0011 0.7124
+d:Ma/StainlessSteel304/Density     = 8.00 g/cm3
+
+################################ Capsule Cap Geometry #######################################
+
+s:Ge/CADVolumeStl/Parent     = "World"
+s:Ge/CADVolumeStl/Material   = "G4_Cu" # will start testing with copper
+s:Ge/CADVolumeStl/Type       = "TsCAD"
+s:Ge/CADVolumeStl/InputFile  = "SurfaceFilter4"
+s:Ge/CADVolumeStl/FileFormat = "stl"
+d:Ge/CADVolumeStl/Units      = 1.0 mm # 1.0cm
+d:Ge/CADVolumeStl/TransX     = -0.925 cm
+d:Ge/CADVolumeStl/TransY     = -0.925 cm
+d:Ge/CADVolumeStl/TransZ     = 4.75 cm # was 4.75cm
+d:Ge/CADVolumeStl/RotX       = 0 deg
+d:Ge/CADVolumeStl/RotY       = 0 deg
+d:Ge/CADVolumeStl/RotZ       = 0 deg
+
+s:Ge/CADVolumeStl/DrawingStyle   = "WireFrame"
+b:Ge/CADVolumeStl/IsParallel = "True"
+
+s:Ge/PMMAcap/Type         = "TsSphere"
+s:Ge/PMMAcap/Material     = "Lucite" #should be lucite
+s:Ge/PMMAcap/Parent       = "World"
+d:Ge/PMMAcap/RMin         = 0. mm
+d:Ge/PMMAcap/RMax         = 15. mm
+d:Ge/PMMAcap/SPhi         = 0. deg
+d:Ge/PMMAcap/DPhi         = 360. deg
+d:Ge/PMMAcap/STheta       = 0. deg
+d:Ge/PMMAcap/DTheta       = 90. deg
+d:Ge/PMMAcap/TransZ       = 4.0 cm
+s:Ge/PMMAcap/DrawingStyle = "Solid"
+s:Ge/PMMAcap/Color        = "transparentblue"
+
+b:Ge/PMMAcap/IsParallel = "True"
+
+s:Ge/CADVolumeStl2/Parent     = "World"
+s:Ge/CADVolumeStl2/Material   = "StainlessSteel316L"
+s:Ge/CADVolumeStl2/Type       = "TsCAD"
+s:Ge/CADVolumeStl2/InputFile  = "GammaMedCapsule"
+s:Ge/CADVolumeStl2/FileFormat = "stl"
+d:Ge/CADVolumeStl2/Units      = 1.0 mm # 1.0mm
+d:Ge/CADVolumeStl2/TransX     = 0.45 mm
+d:Ge/CADVolumeStl2/TransY     = -0.45 mm
+d:Ge/CADVolumeStl2/TransZ     = 42.95 mm
+d:Ge/CADVolumeStl2/RotX       = 0 deg
+d:Ge/CADVolumeStl2/RotY       = 90 deg
+d:Ge/CADVolumeStl2/RotZ       = 0 deg
+
+b:Ge/CADVolumeStl2/IsParallel = "True"
+
+s:Ge/ActiveCylinder1/Type         = "TsCylinder"
+s:Ge/ActiveCylinder1/Material     = "G4_Ir"
+s:Ge/ActiveCylinder1/Parent       = "World"
+d:Ge/ActiveCylinder1/RMin         = 0 mm
+d:Ge/ActiveCylinder1/RMax         = 0.3 mm
+d:Ge/ActiveCylinder1/HL           = 1.75 mm
+d:Ge/ActiveCylinder1/SPhi         = 0. deg
+d:Ge/ActiveCylinder1/DPhi         = 360. deg
+d:Ge/ActiveCylinder1/TransZ       = 4.5 cm # 4.5 cm is the tip position
+s:Ge/ActiveCylinder1/Color        = "White"
+s:Ge/ActiveCylinder1/DrawingStyle = "Solid"
+
+b:Ge/ActiveCylinder1/IsParallel = "True"
+
+
+iv:Gr/Color/transparentblue    = 4 50 50 255 90
+iv:Gr/Color/moretransparentblue    = 4 50 50 255 10
+iv:Gr/Color/transparentgreen  = 4 0 255 0 150
+iv:Gr/Color/transparentyellow = 4 255 255 0 100
+iv:Gr/Color/transparentred    = 4 255 0 0 100
+iv:Gr/Color/shieldingcolor = 4 255 255 255 80
+
+############################ Capsule Cylinder Geometry #################################
+
+s:Ge/PMMAcylinder/Type         = "TsCylinder"
+s:Ge/PMMAcylinder/Material     = "Lucite" # should be lucite
+s:Ge/PMMAcylinder/Parent       = "World"
+d:Ge/PMMAcylinder/RMin         = 0 mm
+d:Ge/PMMAcylinder/RMax         = 15.0 mm
+d:Ge/PMMAcylinder/HL           = 40.0 mm
+d:Ge/PMMAcylinder/SPhi         = 0. deg
+d:Ge/PMMAcylinder/DPhi         = 360. deg
+s:Ge/PMMAcylinder/DrawingStyle = "Solid"
+s:Ge/PMMAcylinder/Color        = "transparentblue"
+
+b:Ge/PMMAcylinder/IsParallel = "True"
+
+s:Ge/HalfcylinderAir/Type         = "TsCylinder"
+s:Ge/HalfcylinderAir/Material     = "G4_AIR"
+s:Ge/HalfcylinderAir/Parent       = "World"
+d:Ge/HalfcylinderAir/RMin         = 0.0 mm
+d:Ge/HalfcylinderAir/RMax         = 0.75 mm
+d:Ge/HalfcylinderAir/HL           = 45.0 mm
+d:Ge/HalfcylinderAir/SPhi         = 0 deg
+d:Ge/HalfcylinderAir/DPhi         = 360 deg
+d:Ge/HalfcylinderAir/RotZ         = -90. deg
+s:Ge/HalfcylinderAir/DrawingStyle = "Solid"
+s:Ge/HalfcylinderAir/Color        = "transparentred"
+d:Ge/HalfcylinderAir/TransZ       = 5.0 mm 
+
+b:Ge/HalfcylinderAir/IsParallel = "True"
+
+################################ Phantom #######################################
+
+s:Ge/Phantom/Parent   = "World"
+s:Ge/Phantom/Type     = "TsBox"
+s:Ge/Phantom/Material = "G4_WATER"
+d:Ge/Phantom/HLX      = 8.0 cm
+d:Ge/Phantom/HLY      = 0.05 cm
+d:Ge/Phantom/HLZ      = 8.0 cm
+d:Ge/Phantom/TransX   = 0.0 cm 
+d:Ge/Phantom/TransY   = 0.0 cm 
+d:Ge/Phantom/TransZ   = 0.5 cm
+d:Ge/Phantom/RotX     = 0.0 deg
+d:Ge/Phantom/RotY     = 0.0 deg
+d:Ge/Phantom/RotZ     = 0.0 deg
+
+#b:Ge/Phantom/IsParallel = "True"
+
+s:Ge/Phantom/DrawingStyle   = "WireFrame"
+s:Ge/Phantom/Color = "transparentblue"
+
+####################################### Source 1 #######################################
+
+s:So/Source1/Type                      = "Volumetric" #Isotropic
+s:So/Source1/Component                 = "ActiveCylinder1"
+s:So/Source1/ActiveMaterial            = "G4_Ir"
+s:So/Source1/BeamParticle              = "gamma"
+i:So/Source1/MaxNumberOfPointsToSample = 1000000000
+s:So/Source1/BeamEnergySpectrumType    = "Discrete"
+i:So/Source1/NumberOfHistoriesInRun    = 500000000
+
+dv:So/Source1/BeamEnergySpectrumValues = 39 61.486 63.0 65.122 66.831 71.079 71.414 73.363 75.368 75.749 77.831 110.4 136.3426 176.98 201.3112 205.79430 280.27 283.2668 295.95650 308.45507 316.50618 329.17 374.4852 416.4688 420.52 468.0688 484.5751 485.30 489.06 588.5810 593.49 599.41 604.41105 612.4621 703.87 765.8 884.5365 1061.48 1089.9 1378.20 keV
+
+uv:So/Source1/BeamEnergySpectrumWeightsUnscaled = 39 0.0120 0.0205 0.0263 0.0446 0.00241 0.00466 0.00163 0.00533 0.01025 0.00365 0.000122 0.0020 0.000043 0.00473 0.0334 0.00009 0.00266 0.2872 0.2968 0.8271 0.000174 0.00726 0.00669 0.00069 0.4781 0.03187 0.000023 0.00438 0.04517 0.000421 0.000039 0.0820 0.0534 0.000053 0.000013 0.00291 0.000530 0.000012 0.000012
+
+uv:So/Source1/BeamEnergySpectrumWeights = 0.43492973 * So/Source1/BeamEnergySpectrumWeightsUnscaled
+
+#############################################################################################
+####################################	Phantom Dose Scoring	#############################
+#############################################################################################
+
+s:Sc/DoseToPhantom_Binned/Quantity        		  	= "TrackLengthEstimator"
+s:Sc/DoseToPhantom_Binned/Component       		  	= "Phantom"
+b:Sc/DoseToPhantom_Binned/OutputToConsole           		= "TRUE"
+s:Sc/DoseToPhantom_Binned/IfOutputFileAlreadyExists 		= "Increment"
+s:Sc/DoseToPhantom_Binned/OutputFile 				= "FilterTest_DoseFromDwell1_DTLE"
+sv:Sc/DoseToPhantom_Binned/Report 			  	= 2 "Sum" "Standard_Deviation"
+sv:Sc/DoseToPhantom_Binned/OnlyIncludeParticlesNamed            = 1 "gamma"
+s:Sc/DoseToPhantom_Binned/InputFile                             = "Muen.dat"
+
+i:Sc/DoseToPhantom_Binned/XBins      				= 1600
+i:Sc/DoseToPhantom_Binned/YBins    				= 1
+i:Sc/DoseToPhantom_Binned/ZBins  				= 1600
+
+################################### Physics List ######################################
+
+sv:Ph/Default/Modules = 1 "g4em-standard_opt4"
+
+sv:Ph/Default/LayeredMassGeometryWorlds = 6 "PMMAcap" "PMMAcylinder" "CADVolumeStl" "HalfcylinderAir" "CADVolumeStl2" "ActiveCylinder1"
+
+###################################### End ############################################
